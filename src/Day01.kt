@@ -105,18 +105,9 @@ fun main() {
 }
 
 private fun List<Int>.countSequentialIncreases(): Int {
-  var result = 0
   var previous = this.first() // Start with the first value so we are not off by 1
 
-  forEach { current ->
-    // Check if the current number is greater than the previous one
-    // On the first run these are guaranteed to be equal so we will not increment.
-    if (current > previous) {
-      result++
-    }
-
-    previous = current // Keep track of the previous amount for comparison.
+  return count { current ->
+    (current > previous).also { previous = current }
   }
-
-  return result
 }
