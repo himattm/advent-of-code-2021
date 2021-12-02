@@ -78,32 +78,13 @@ Consider sums of a three-measurement sliding window. How many sums are larger th
 
 fun main() {
   fun part1(input: List<String>): Int {
-    var result = 0
-    var previous = input.first().toInt() // The first element shouldn't count so we start here.
-
-    input
+    return input
       .map { it.toInt() } // Make everything in the list an integer.
-      .forEach { current ->
-        // Check if the current number is greater than the previous one
-        // On the first run these are guaranteed to be equal so we will not increment.
-        if (current > previous) {
-          result++
-        }
-
-        previous = current // Keep track of the previous amount for comparison.
-      }
-
-    return result
+      .countSequentialIncreases()
   }
 
   fun part2(input: List<String>): Int {
-    var result = 0
-    var previousSum = input // We need the first sum to start with so we are not off by 1
-      .take(3) // Take the first 3
-      .map { it.toInt() } // Map to Int
-      .sum() // Add them all together
-
-    input
+    return input
       .map { it.toInt() }
       .windowed(
         size = 3,
@@ -111,20 +92,31 @@ fun main() {
         partialWindows = false, // Partial windows are not allowed from the prompt.
       )
       .map { window -> window.sum() }
-      .forEach { currentSum ->
-        // Check if the currentSum is greater than the previousSum
-        // On the first run these are guaranteed to be equal so we will not increment.
-        if (currentSum > previousSum) {
-          result++
-        }
-
-        previousSum = currentSum // Keep track of the previous amount for comparison.
-      }
-
-    return result
+      .countSequentialIncreases()
   }
 
   val input = readInput("Day01")
+
+  check(part1(input) == 1475)
   println(part1(input))
+
+  check(part2(input) == 1516)
   println(part2(input))
+}
+
+private fun List<Int>.countSequentialIncreases(): Int {
+  var result = 0
+  var previous = this.first() // Start with the first value so we are not off by 1
+
+  forEach { current ->
+    // Check if the current number is greater than the previous one
+    // On the first run these are guaranteed to be equal so we will not increment.
+    if (current > previous) {
+      result++
+    }
+
+    previous = current // Keep track of the previous amount for comparison.
+  }
+
+  return result
 }
