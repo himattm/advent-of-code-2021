@@ -115,8 +115,10 @@ fun main() {
     var depth = 0
 
     input
-      .map { it.split(" ") } // Split up the input into List<List<String>>
-      .map { Pair(it[0], it[1].toInt()) } // Make them Pair<String, Int>
+      .map {
+        val split = it.split(" ") // Split up the input into List<List<String>>
+        Pair(split[0], split[1].toInt()) // Make them Pair<String, Int>
+      }
       .forEach { pair ->
         // Perform the operations for each direction.
         when (pair.first) {
@@ -138,9 +140,9 @@ fun main() {
 
   val input = readInput("Day02")
 
-  // check(part1(input) == 1475)
+  check(part1(input) == 1480518)
   println(part1(input))
 
-  // check(part2(input) == 1516)
+  check(part2(input) == 1282809906)
   println(part2(input))
 }
