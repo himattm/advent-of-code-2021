@@ -73,7 +73,7 @@ have after following the planned course. What do you get if you multiply your fi
 position by your final depth?
 */
 
-private fun parseInputs(input: List<String>): Map<String, Int> {
+private fun associateDirections(input: List<String>): Map<String, Int> {
   val result = mutableMapOf<String, Int>()
 
   input
@@ -91,13 +91,17 @@ private fun parseInputs(input: List<String>): Map<String, Int> {
   return result
 }
 
+const val FORWARD = "forward"
+const val DOWN = "down"
+const val UP = "up"
+
 fun main() {
   fun part1(input: List<String>): Int {
-    val directionsMap = parseInputs(input)
+    val directionsMap = associateDirections(input)
 
-    val forward = directionsMap.getOrDefault("forward", 0)
-    val up = directionsMap.getOrDefault("up", 0)
-    val down = directionsMap.getOrDefault("down", 0)
+    val forward = directionsMap.getOrDefault(FORWARD, 0)
+    val up = directionsMap.getOrDefault(UP, 0)
+    val down = directionsMap.getOrDefault(DOWN, 0)
 
     val depth = down - up // up moves us in the negative direction from the prompt
 
@@ -105,7 +109,31 @@ fun main() {
   }
 
   fun part2(input: List<String>): Int {
-    return 2
+    // Start by defining all of the values we will need
+    var forward = 0
+    var aim = 0
+    var depth = 0
+
+    input
+      .map { it.split(" ") } // Split up the input into List<List<String>>
+      .map { Pair(it[0], it[1].toInt()) } // Make them Pair<String, Int>
+      .forEach { pair ->
+        // Perform the operations for each direction.
+        when (pair.first) {
+          FORWARD -> {
+            forward += pair.second
+            depth += pair.second * aim
+          }
+          DOWN -> {
+            aim += pair.second
+          }
+          UP -> {
+            aim -= pair.second
+          }
+        }
+      }
+
+    return forward * depth
   }
 
   val input = readInput("Day02")
